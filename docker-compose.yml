@@ -9,7 +9,10 @@ services:
       - backend
     networks:
       - internal
-
+    restart: always
+    ports:
+      - 3000:3000
+      
   backend:
     build:
       context: ./backend
