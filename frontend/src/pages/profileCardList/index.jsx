@@ -21,11 +21,11 @@ import CreateProfileCardModal from './components/CreateProfileCardModal';
 import './index.scss';
 
 const DetailPageLink = React.memo((props) => {
-  const { data: { id, name } } = props;
-  if (!id) return null;
+  const { data: { idx, name } } = props;
+  if (!idx) return null;
 
   return (
-    <Link to={`/${id}`}>
+    <Link to={`/${idx}`}>
       {name}
     </Link>
   );
@@ -34,7 +34,16 @@ const DetailPageLink = React.memo((props) => {
 const ProfileCardList = () => {
   const [rowData, setRowData] = useState([]);
   const [columnDefs, setColumnDefs] = useState([
-    { headerName: '이름', field: 'name', cellClass: 'default-cell', cellRenderer: DetailPageLink }
+    { headerName: '이름', field: 'name', cellClass: 'default-cell', cellRenderer: DetailPageLink },
+    { headerName: '닉네임', field: 'nickname'},
+    { headerName: '전화번호', field: 'phone_number'},
+    { headerName: '이메일', field: 'email'},
+    { headerName: '생일', field: 'birth'},
+    { headerName: '주소', field: 'address'},
+    { headerName: '성별', field: 'gender'},
+    { headerName: '생성일', field: 'created_at'},
+    { headerName: '수정일', field: 'updated_at'},
+    { headerName: '삭제일', field: 'delted_at'},
   ]);
   const [paginationInfo, setPaginationInfo] = useState({
     current: 1,
@@ -57,7 +66,7 @@ const ProfileCardList = () => {
     // TODO: Change your api
     const response = await request({
       method: 'GET',
-      url: '/api/profile-card',
+      url: '/api/user/userList',
       params: {
         current: targetPage || paginationInfo.current,
         columns: columnDefs.map(({ field }) => field),
@@ -66,6 +75,7 @@ const ProfileCardList = () => {
       },
     });
     if (!response || !response.list) return;
+    
 
     setRowData(response.list);
     setPaginationInfo(prev => ({
@@ -110,7 +120,7 @@ const ProfileCardList = () => {
     // TODO: Change your api
     const response = await request({
       method: 'POST',
-      url: '/api/??',
+      url: '/api/user/addUser',
       data: { createTargetName }
     });
     if (!response || !response.created) return;
