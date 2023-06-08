@@ -7,21 +7,21 @@ module.exports = (sequelize, DataTypes) => {
         },
         name: {
             type: DataTypes.STRING(30),
-            allowNull: true,
+            allowNull: false,
         },
         nickname: {
             type: DataTypes.STRING(30),
-            allowNull: false,
+            allowNull: true,
             unique: true,
         },
         phone_number: {
             type: DataTypes.STRING(20),
-            allowNull: false,
+            allowNull: true,
             unique: true,
         },
         email: {
             type: DataTypes.STRING(20),
-            allowNull: false,
+            allowNull: true,
             unique: true,
             validate: {
                 isEmail: true,
@@ -29,22 +29,23 @@ module.exports = (sequelize, DataTypes) => {
         },
         birth: {
             type: DataTypes.DATEONLY,
-            allowNull: false,
+            allowNull: true,
         },
         address: {
             type: DataTypes.STRING(60),
-            allowNull: false,
+            allowNull: true,
         },
         gender: {
             type: DataTypes.ENUM('남자', '여자', '기타'),
-            allowNull: false,
+            allowNull: true,
         },
       },{
         tableName: "user",
         paranoid: true,
         createdAt: "created_at",
         updatedAt: "updated_at",
-        deletedAt: "deleted_at"
+        deletedAt: "deleted_at",
+        timestamps: true
       });
     
       model.associate = (models) => {
