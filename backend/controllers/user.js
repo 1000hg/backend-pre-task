@@ -1,6 +1,19 @@
 const UserService = require('../services/user');
 const Status = require('../common/status')
 
+async function userColumnList(req, res, next) {
+    try {
+        const user_column_list = await UserService.userColumnList(res);
+        
+        user_column_list ? Status.sendSuccessResponse(res, "컬럼 리스트를 호출하였습니다.", user_column_list)
+                : Status.sendNotFoundResponse(res, "컬럼 리스트 호출에 실패하였습니다.");
+    } catch (error) {
+        console.error('Error:', error);
+        Status.sendErrorResponse(res, "서버 호출에 실패하였습니다.");
+    }
+}
+
+
 async function userList(req, res, next) {
     try {
         const user_list = await UserService.userList(res)
@@ -21,7 +34,7 @@ async function addUser(req, res, next) {
 
     if (data) {
         try {
-            const insert_user = await UserService.addUser(data)
+            const insert_user = await UserService.addUser(res, data)
             insert_user ? Status.sendSuccessResponse(res, "성공적으로 삽입되었습니다.", insert_user)
                         : Status.sendErrorResponse(res, "삽입에 실패하였습니다.")
         } catch (error) {
@@ -34,6 +47,7 @@ async function addUser(req, res, next) {
 }
 
 module.exports = {
+    userColumnList,
     userList,
     addUser
 };

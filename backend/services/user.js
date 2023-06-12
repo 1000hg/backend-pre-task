@@ -18,18 +18,32 @@ const findUserByNickName = async (nickname) => {
 }
 
 
+
+const userColumnList = async (res) => {
+    try {
+        const columns = Object.keys(UserModel.rawAttributes).map(attribute => ({
+            label: attribute,
+            dataKey: attribute,
+            parentDataKey: null,
+        }));
+      
+          res.json({ columns });
+    } catch (error) {
+        console.error('Error:', error);
+    }
+};
+
 const userList = async (res) => {
     try {
         const list = await UserModel.findAll();
 
-        console.log(list[0])
-        res.json({ list });
+        res.json({ list, total:list.length });
     } catch (error) {
         console.error('Error :', error);
     }
 }
 
-const addUser = async (data) => {
+const addUser = async (res, data) => {
     try {
         const newUser = await UserModel.create(data);
 
@@ -41,6 +55,7 @@ const addUser = async (data) => {
 
 module.exports = {
     findUserByNickName,
+    userColumnList,
     userList,
     addUser
 }

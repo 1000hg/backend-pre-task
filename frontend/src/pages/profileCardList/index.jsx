@@ -75,7 +75,6 @@ const ProfileCardList = () => {
       },
     });
 
-    console.log(response)
     if (!response || !response.list) return;
     
 
@@ -88,12 +87,13 @@ const ProfileCardList = () => {
     setOrderInfo(sort);
   }, listFetchDependencies);
 
-  const fetchAvailableColumns = useCallback(async () => {
+  /*const fetchAvailableColumns = useCallback(async () => {
     // TODO: Change your api
     const response = await request({
       method: 'GET',
-      url: '/api/??',
+      url: 'http://127.0.0.1:4000/user/userColumnList',
     });
+    
     if (!response || !response.columns) return;
 
     setColumnDefs([
@@ -111,11 +111,11 @@ const ProfileCardList = () => {
         comparator: () => 0,
       })),
     ]);
-  }, []);
+  }, []);*/
 
   useEffect(() => {
     fetchProfileList();
-    fetchAvailableColumns();
+    //fetchAvailableColumns();
   }, []);
 
   const onCreateProfileCard = useCallback(async (createTargetName) => {
@@ -127,7 +127,6 @@ const ProfileCardList = () => {
     });
     if (!response || !response.success) return;
 
-    console.log(paginationInfo);
     await fetchProfileList(paginationInfo.current);
     closeCreateProfileCardModal();
   }, [paginationInfo, orderInfo]);

@@ -6,6 +6,8 @@ const UserController = require('../controllers/user');
 //const UserValidate = require('../validates/user');
 const { user: User } = require('../models');
 
+router.get('/userColumnList', UserController.userColumnList);
+
 router.get('/userList', UserController.userList);
 
 router.post('/addUser', UserController.addUser);
