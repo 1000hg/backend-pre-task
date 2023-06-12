@@ -9,9 +9,6 @@ services:
       - backend
     networks:
       - internal
-    restart: always
-    ports:
-      - 3000:3000
       
   backend:
     build:
@@ -24,6 +21,8 @@ services:
       - db
     networks:
       - internal
+    ports:
+      - 4000:4000
 
   db:
     image: mysql
