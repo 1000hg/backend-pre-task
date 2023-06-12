@@ -24,11 +24,11 @@ const ProfileCardDetail = (props) => {
     // TODO: Change your api
     const response = await request({
       method: 'GET',
-      url: '/api/??',
+      url: `http://127.0.0.1:4000/user/userInfo/${fetchTargetId}`,
     });
-    if (!response || !response.profileCardDetail) return;
+    if (!response || !response.data) return;
 
-    setProfileDetail(response.profileCardDetail);
+    setProfileDetail(response.data);
   }, []);
 
   useEffect(() => {

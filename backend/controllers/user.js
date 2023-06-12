@@ -26,6 +26,19 @@ async function userList(req, res, next) {
     }
 }
 
+async function userInfo(req, res, next) {
+    const user_idx = req.params.user_idx;
+    try {
+        const user_info = await UserService.userInfo(user_idx)
+
+        user_info ? Status.sendSuccessResponse(res, "유저 정보를 호출하였습니다.", user_info)
+                : Status.sendNotFoundResponse(res, "유저 정보 호출에 실패하였습니다.");
+    } catch (error) {
+        console.error('Error:', error);
+        Status.sendErrorResponse(res, "서버 호출에 실패하였습니다.");
+    }
+}
+
 async function addUser(req, res, next) {
     let data = {}
     const name  = req.body.createTargetName;
@@ -49,5 +62,6 @@ async function addUser(req, res, next) {
 module.exports = {
     userColumnList,
     userList,
+    userInfo,
     addUser
 };

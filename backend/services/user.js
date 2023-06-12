@@ -43,6 +43,22 @@ const userList = async (res) => {
     }
 }
 
+
+const userInfo = async (user_idx) => {
+    try {
+        const user = await UserModel.findOne({
+            where: {
+              idx: user_idx,
+            },
+        });
+
+        return user;
+    } catch (error) {
+        console.error('Error :', error);
+    }
+}
+
+
 const addUser = async (res, data) => {
     try {
         const newUser = await UserModel.create(data);
@@ -57,5 +73,6 @@ module.exports = {
     findUserByNickName,
     userColumnList,
     userList,
+    userInfo,
     addUser
 }

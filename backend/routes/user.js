@@ -10,6 +10,8 @@ router.get('/userColumnList', UserController.userColumnList);
 
 router.get('/userList', UserController.userList);
 
+router.get('/userInfo/:user_idx', UserController.userInfo);
+
 router.post('/addUser', UserController.addUser);
 
 module.exports = router;
