@@ -17,12 +17,23 @@ const findUserByNickName = async (nickname) => {
     }
 }
 
+
+const userList = async (res) => {
+    try {
+        const list = await UserModel.findAll();
+
+        console.log(list[0])
+        res.json({ list });
+    } catch (error) {
+        console.error('Error :', error);
+    }
+}
+
 const addUser = async (data) => {
     try {
         const newUser = await UserModel.create(data);
 
         return newUser;
-
     } catch (error) {
         console.error('Error :', error);
     }
@@ -30,5 +41,6 @@ const addUser = async (data) => {
 
 module.exports = {
     findUserByNickName,
+    userList,
     addUser
 }

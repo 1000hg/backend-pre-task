@@ -66,7 +66,7 @@ const ProfileCardList = () => {
     // TODO: Change your api
     const response = await request({
       method: 'GET',
-      url: '/api/user/userList',
+      url: 'http://127.0.0.1:4000/user/userList',
       params: {
         current: targetPage || paginationInfo.current,
         columns: columnDefs.map(({ field }) => field),
@@ -74,6 +74,8 @@ const ProfileCardList = () => {
         sort: sort || orderInfo,
       },
     });
+
+    console.log(response)
     if (!response || !response.list) return;
     
 
@@ -120,11 +122,12 @@ const ProfileCardList = () => {
     // TODO: Change your api
     const response = await request({
       method: 'POST',
-      url: '/api/user/addUser',
+      url: 'http://127.0.0.1:4000/user/addUser',
       data: { createTargetName }
     });
-    if (!response || !response.created) return;
+    if (!response || !response.success) return;
 
+    console.log(paginationInfo);
     await fetchProfileList(paginationInfo.current);
     closeCreateProfileCardModal();
   }, [paginationInfo, orderInfo]);
