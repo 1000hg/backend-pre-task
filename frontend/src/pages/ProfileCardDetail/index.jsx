@@ -26,6 +26,7 @@ const ProfileCardDetail = (props) => {
       method: 'GET',
       url: `http://127.0.0.1:4000/user/userInfo/${fetchTargetId}`,
     });
+    
     if (!response || !response.data) return;
 
     setProfileDetail(response.data);
@@ -47,10 +48,12 @@ const ProfileCardDetail = (props) => {
   }, [profileCardId]);
 
   const singleDataProps = useMemo(() => {
+
     if (!profileDetail || !profileDetail.valueStructures) return {};
 
-    const { value, valueStructures: allDataStructures } = profileDetail;
-    const singleDataStructures = allDataStructures.filter(({ type, parentDataKey }) => type !== 'list' && !parentDataKey);
+    const { value, valueStructures: valueStructures } = profileDetail;
+    const singleDataStructures = valueStructures.filter(({ type, parentDataKey }) => type !== 'list' && !parentDataKey);
+    console.log(singleDataStructures)
     return {
       value,
       structures: singleDataStructures,
@@ -104,10 +107,10 @@ const ProfileCardDetail = (props) => {
           {...singleDataProps}
           onSaveValue={onSaveValue}
         />
-        <ListData
+        {/* <ListData
           {...listDataProps}
           onSaveValue={onSaveValue}
-        />
+        /> */}
       </div>
     </div>
   );

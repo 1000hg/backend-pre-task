@@ -23,7 +23,19 @@ const userColumnList = async (res) => {
     try {
         const tableInfo = await UserModel.describe();
       
-        return tableInfo;
+        const columns = Object.entries(tableInfo).map(([columnName, columnInfo]) => {
+            const { comment, type, parentDataKey } = columnInfo;
+            const dataKey = columnName;
+          
+            return {
+              label: comment,
+              dataKey,
+              type,
+              parentDataKey,
+            };
+        });
+
+        return columns;
     } catch (error) {
         console.error('Error:', error);
     }
@@ -42,13 +54,27 @@ const userList = async (res) => {
 
 const userInfo = async (user_idx) => {
     try {
-        const user = await UserModel.findOne({
+        const value = await UserModel.findOne({
             where: {
               idx: user_idx,
             },
         });
 
-        return user;
+        const tableInfo = await UserModel.describe();
+
+        const valueStructures = Object.entries(tableInfo).map(([columnName, columnInfo]) => {
+            const { comment, type, parentDataKey } = columnInfo;
+            const dataKey = columnName;
+          
+            return {
+              label: comment,
+              dataKey,
+              type,
+              parentDataKey,
+            };
+        });
+
+        return {value, valueStructures};
     } catch (error) {
         console.error('Error :', error);
     }

@@ -85,7 +85,6 @@ const ProfileCardList = () => {
       url: 'http://127.0.0.1:4000/user/userColumnList',
     });
     
-    console.log(response);
     if (!response || !response.data) return;
 
     setColumnDefs([
@@ -93,17 +92,15 @@ const ProfileCardList = () => {
         headerName: '이름',
         field: 'name',
         cellClass: 'default-cell',
+        comparator: () => 0,
         cellRenderer: DetailPageLink,
       },
-      ...Object.keys(response.data).map((key) => {
-        const { comment } = response.data[key];
-        
-        return {
-          headerName: comment,
-          field: key,
-          cellClass: 'default-cell',
-        };
-      }),
+      ...response.data.map(({ label, dataKey, parentDataKey }) => ({
+        headerName: label,
+        field: parentDataKey ? `${parentDataKey}_${dataKey}_0` : dataKey,
+        cellClass: 'default-cell',
+        comparator: () => 0,
+      })),
     ]);
 
   }, []);
