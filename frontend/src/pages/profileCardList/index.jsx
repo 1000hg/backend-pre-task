@@ -35,15 +35,6 @@ const ProfileCardList = () => {
   const [rowData, setRowData] = useState([]);
   const [columnDefs, setColumnDefs] = useState([
     { headerName: '이름', field: 'name', cellClass: 'default-cell', cellRenderer: DetailPageLink },
-    { headerName: '닉네임', field: 'nickname'},
-    { headerName: '전화번호', field: 'phone_number'},
-    { headerName: '이메일', field: 'email'},
-    { headerName: '생일', field: 'birth'},
-    { headerName: '주소', field: 'address'},
-    { headerName: '성별', field: 'gender'},
-    { headerName: '생성일', field: 'created_at'},
-    { headerName: '수정일', field: 'updated_at'},
-    { headerName: '삭제일', field: 'delted_at'},
   ]);
   const [paginationInfo, setPaginationInfo] = useState({
     current: 1,
@@ -87,36 +78,44 @@ const ProfileCardList = () => {
     setOrderInfo(sort);
   }, listFetchDependencies);
 
-  /*const fetchAvailableColumns = useCallback(async () => {
+  const fetchAvailableColumns = useCallback(async () => {
     // TODO: Change your api
     const response = await request({
       method: 'GET',
       url: 'http://127.0.0.1:4000/user/userColumnList',
     });
     
-    if (!response || !response.columns) return;
+    console.log(response);
+    if (!response || !response.data) return;
 
     setColumnDefs([
       {
         headerName: '이름',
         field: 'name',
         cellClass: 'default-cell',
-        comparator: () => 0,
         cellRenderer: DetailPageLink,
       },
-      ...response.columns.map(({ label, dataKey, parentDataKey }) => ({
-        headerName: label,
-        field: parentDataKey ? `${parentDataKey}_${dataKey}_0` : dataKey,
-        cellClass: 'default-cell',
-        comparator: () => 0,
-      })),
+      ...Object.keys(response.data).map((key) => {
+        const { comment } = response.data[key];
+        
+        return {
+          headerName: comment,
+          field: key,
+          cellClass: 'default-cell',
+        };
+      }),
     ]);
-  }, []);*/
+
+  }, []);
 
   useEffect(() => {
     fetchProfileList();
-    //fetchAvailableColumns();
+    fetchAvailableColumns();
   }, []);
+  
+  useEffect(() => {
+    console.log(columnDefs);
+  }, [columnDefs]);
 
   const onCreateProfileCard = useCallback(async (createTargetName) => {
     // TODO: Change your api

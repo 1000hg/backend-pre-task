@@ -21,13 +21,9 @@ const findUserByNickName = async (nickname) => {
 
 const userColumnList = async (res) => {
     try {
-        const columns = Object.keys(UserModel.rawAttributes).map(attribute => ({
-            label: attribute,
-            dataKey: attribute,
-            parentDataKey: null,
-        }));
+        const tableInfo = await UserModel.describe();
       
-          res.json({ columns });
+        return tableInfo;
     } catch (error) {
         console.error('Error:', error);
     }
