@@ -59,9 +59,30 @@ async function addUser(req, res, next) {
     }
 }
 
+async function updateUser(req, res, next) {
+    const { newValue, parentDataKey, itemIndex } = req.body;
+
+    if (newValue) {
+        try {
+
+            newValue.birdh = new Date(newValue.birdh);
+
+            const update_user = await UserService.updateUser(newValue)
+            update_user ? Status.sendSuccessResponse(res, "성공적으로 삽입되었습니다.", update_user)
+                        : Status.sendErrorResponse(res, "삽입에 실패하였습니다.")
+        } catch (error) {
+            console.error('Error:', error);
+            Status.sendErrorResponse(res, "서버 호출에 실패하였습니다.");
+        }
+    } else {
+        Status.sendNotFoundResponse(res, "이름을 입력해주세요.")
+    }
+}
+
 module.exports = {
     userColumnList,
     userList,
     userInfo,
-    addUser
+    addUser,
+    updateUser
 };

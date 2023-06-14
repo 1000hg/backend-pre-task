@@ -14,4 +14,6 @@ router.get('/userInfo/:user_idx', UserController.userInfo);
 
 router.post('/addUser', UserController.addUser);
 
+router.post('/updateUser', UserController.updateUser);
+
 module.exports = router;
