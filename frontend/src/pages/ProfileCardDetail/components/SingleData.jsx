@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback } from 'react';
+import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Button } from 'antd';
 
@@ -90,6 +90,7 @@ const SingleData = (props) => {
         handeMode={handleMode}
         onSave={() => {
           const newValues = form.getFieldsValue();
+          newValues.idx = parsedValue.idx
           onSaveValue(newValues);
         }}
         onReset={() => form.resetFields()}
@@ -98,15 +99,18 @@ const SingleData = (props) => {
         form={form}
         initialValues={parsedValue}
       >
-        {structures.map(({ label, dataKey, type }) => (
-          <Form.Item
-            key={dataKey}
-            name={dataKey}
-            label={label}
-          >
-            <DataBinder type={type} disabled={mode === MODE.VIEW}/>
-          </Form.Item>
-        ))}
+
+        {structures.map(({ label, dataKey, type }) => {
+          if (dataKey === 'idx') {
+            return null;
+          }
+
+          return (
+            <Form.Item key={dataKey} name={dataKey} label={label}>
+              <DataBinder type={type} disabled={mode === MODE.VIEW} />
+            </Form.Item>
+          );
+        })}
       </Form>
     </div>
   );
@@ -120,7 +124,7 @@ SingleData.propTypes = {
   structures: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string,
     dataKey: PropTypes.string,
-    type: PropTypes.oneOf(['text', 'phone', 'email', 'date']),
+    type: PropTypes.string,
   })),
   onSaveValue:PropTypes.func,
 };

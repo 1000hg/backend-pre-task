@@ -53,7 +53,6 @@ const ProfileCardDetail = (props) => {
 
     const { value, valueStructures: valueStructures } = profileDetail;
     const singleDataStructures = valueStructures.filter(({ type, parentDataKey }) => type !== 'list' && !parentDataKey);
-    console.log(singleDataStructures)
     return {
       value,
       structures: singleDataStructures,
@@ -61,9 +60,10 @@ const ProfileCardDetail = (props) => {
   }, [profileDetail]);
 
   const listDataProps = useMemo(() => {
-    if (!profileDetail || !profileDetail.valueStructures) return {};
+    console.log(profileDetail)
+    if (!profileDetail || !profileDetail.listStructures) return {};
 
-    const { value, valueStructures: allDataStructures } = profileDetail;
+    const { value, listStructures: allDataStructures } = profileDetail;
     const listStructures = allDataStructures.filter(({ type }) => type === 'list');
     const listWithChildrenStructures = listStructures.map((listStructure) => {
       const { dataKey: targetDataKey } = listStructure;
@@ -78,12 +78,17 @@ const ProfileCardDetail = (props) => {
     };
   }, [profileDetail]);
 
-  const onSaveValue = useCallback(async (newValue, parentDatKey, itemIndex) => {
-    // TODO: Change your api
+  const onSaveValue = useCallback(async (newValue, parentDataKey, itemIndex) => {
     const response = await request({
       method: 'POST',
-      url: '/api/??',
+      url: 'http://127.0.0.1:4000/user/updateUser',
+      data: {
+        newValue,
+        parentDataKey,
+        itemIndex,
+      },
     });
+
     if (!response) return;
 
     fetchProfileCardDetail(profileCardId);
@@ -107,10 +112,10 @@ const ProfileCardDetail = (props) => {
           {...singleDataProps}
           onSaveValue={onSaveValue}
         />
-        {/* <ListData
+        { <ListData
           {...listDataProps}
           onSaveValue={onSaveValue}
-        /> */}
+        /> }
       </div>
     </div>
   );

@@ -14,8 +14,8 @@ export default (value, valueStructures) => {
   if (!valueStructures) return {};
 
   return Object.entries(value)
-    .filter(([, value]) => typeof value === 'string')
     .reduce((acc, crr) => {
+
       const [targetKey, value] = crr;
       if (!targetKey) return acc;
 

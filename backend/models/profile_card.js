@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
           type: DataTypes.INTEGER,
           primaryKey: true,
           autoIncrement: true
+          comment: "인덱스"
       },
       user_idx: {
           type: DataTypes.INTEGER,
@@ -11,23 +12,28 @@ module.exports = (sequelize, DataTypes) => {
           references: {
               model: "user",
               key: "idx"
-          }
+          },
+          comment: "유저인덱스"
       },
       company_name: {
           type: DataTypes.STRING(30),
-          allowNull: true
+          allowNull: true,
+          comment: "회사명"
       },
       job_title: {
           type: DataTypes.STRING(30),
           allowNull: true,
+          comment: "직무"
       },
       hire_date: {
         type: DataTypes.DATEONLY,
         allowNull: true,
+        comment: "입사일"
       },
       quit_date: {
         type: DataTypes.DATEONLY,
         allowNull: true,
+        comment: "퇴사일"
       }
 
   },{
