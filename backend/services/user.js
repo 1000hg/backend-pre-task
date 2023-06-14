@@ -1,5 +1,4 @@
 const { user: UserModel } = require('../models');
-const { profile_card: ProfileModel } = require('../models');
 
 
 const findUserByNickName = async (nickname) => {
@@ -69,15 +68,15 @@ const userInfo = async (user_idx) => {
             },
         });
 
-        const userInfo = await UserModel.describe();
-        const userIncludedColumns = ['idx', 'nickname', 'phone_number', 'email', 'birth', 'gender'];
+        const tableInfo = await UserModel.describe();
+        const includedColumns = ['idx', 'nickname', 'phone_number', 'email', 'birth', 'gender'];
 
         const valueStructures = [];
-        Object.entries(userInfo).map(([columnName, columnInfo]) => {
+        Object.entries(tableInfo).map(([columnName, columnInfo]) => {
             const { comment, type, parentDataKey } = columnInfo;
             const dataKey = columnName;
           
-            if (userIncludedColumns.includes(columnName)) {
+            if (includedColumns.includes(columnName)) {
                 valueStructures.push ({
                     label: comment,
                     dataKey,
@@ -89,27 +88,7 @@ const userInfo = async (user_idx) => {
             return;
         });
 
-        const profileInfo = await ProfileModel.describe();
-        const profileIncludedColumns = ['idx', 'user_idx', 'company_name', 'job_title', 'hire_date', 'quit_date'];
-
-        const listStructures = [];
-        Object.entries(profileInfo).map(([columnName, columnInfo]) => {
-            const { comment, type, parentDataKey } = columnInfo;
-            const dataKey = columnName;
-          
-            if (profileIncludedColumns.includes(columnName)) {
-                listStructures.push ({
-                    label: comment,
-                    dataKey,
-                    type,
-                    parentDataKey,
-                });
-            }
-
-            return;
-        });
-
-        return {value, valueStructures, listStructures};
+        return {value, valueStructures};
     } catch (error) {
         console.error('Error :', error);
     }
@@ -128,8 +107,8 @@ const addUser = async (res, data) => {
 
 const updateUser = async (data) => {
   try {
-    const result = await UserModel.update(data, {
-        where: { idx: data.idx },
+    const result = await UserModel.update(updatedUserInfo, {
+        where: { idx: updatedUserInfo.idx },
     });
   
     if (result[0] === 1) {

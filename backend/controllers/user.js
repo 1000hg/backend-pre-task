@@ -1,4 +1,5 @@
 const UserService = require('../services/user');
+const ProfileService = require('../services/profile_card');
 const Status = require('../common/status')
 
 async function userColumnList(req, res, next) {
@@ -30,8 +31,14 @@ async function userInfo(req, res, next) {
     const user_idx = req.params.user_idx;
     try {
         const user_info = await UserService.userInfo(user_idx)
+        const user_data_list = await ProfileService.profileInfo(user_idx);
 
-        user_info ? Status.sendSuccessResponse(res, "유저 정보를 호출하였습니다.", user_info)
+        const data = {
+            userStructures: user_info,
+            allDataStructures: user_data_list
+        }
+
+        user_info ? Status.sendSuccessResponse(res, "유저 정보를 호출하였습니다.", data)
                 : Status.sendNotFoundResponse(res, "유저 정보 호출에 실패하였습니다.");
     } catch (error) {
         console.error('Error:', error);

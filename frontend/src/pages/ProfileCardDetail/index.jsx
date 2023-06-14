@@ -49,34 +49,35 @@ const ProfileCardDetail = (props) => {
 
   const singleDataProps = useMemo(() => {
 
-    if (!profileDetail || !profileDetail.valueStructures) return {};
+    if (!profileDetail || !profileDetail.userStructures) return {};
 
-    const { value, valueStructures: valueStructures } = profileDetail;
+    const { value, valueStructures: valueStructures } = profileDetail.userStructures;
+
     const singleDataStructures = valueStructures.filter(({ type, parentDataKey }) => type !== 'list' && !parentDataKey);
+
     return {
       value,
       structures: singleDataStructures,
     };
   }, [profileDetail]);
 
-  const listDataProps = useMemo(() => {
-    console.log(profileDetail)
-    if (!profileDetail || !profileDetail.listStructures) return {};
+  // const listDataProps = useMemo(() => {
+  //   if (!profileDetail || !profileDetail.data.listStructures) return {};
 
-    const { value, listStructures: allDataStructures } = profileDetail;
-    const listStructures = allDataStructures.filter(({ type }) => type === 'list');
-    const listWithChildrenStructures = listStructures.map((listStructure) => {
-      const { dataKey: targetDataKey } = listStructure;
-      return {
-        ...listStructure,
-        childrenStructures: allDataStructures.filter(({ parentDataKey }) => parentDataKey === targetDataKey),
-      };
-    });
-    return {
-      value,
-      structures: listWithChildrenStructures,
-    };
-  }, [profileDetail]);
+  //   const { value, listStructures: allDataStructures } = profileDetail;
+  //   const listStructures = allDataStructures.filter(({ type }) => type === 'list');
+  //   const listWithChildrenStructures = listStructures.map((listStructure) => {
+  //     const { dataKey: targetDataKey } = listStructure;
+  //     return {
+  //       ...listStructure,
+  //       childrenStructures: allDataStructures.filter(({ parentDataKey }) => parentDataKey === targetDataKey),
+  //     };
+  //   });
+  //   return {
+  //     value,
+  //     structures: listWithChildrenStructures,
+  //   };
+  // }, [profileDetail]);
 
   const onSaveValue = useCallback(async (newValue, parentDataKey, itemIndex) => {
     const response = await request({
@@ -112,10 +113,10 @@ const ProfileCardDetail = (props) => {
           {...singleDataProps}
           onSaveValue={onSaveValue}
         />
-        { <ListData
+        {/* { <ListData
           {...listDataProps}
           onSaveValue={onSaveValue}
-        /> }
+        /> } */}
       </div>
     </div>
   );
