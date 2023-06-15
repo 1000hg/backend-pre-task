@@ -34,7 +34,7 @@ const DetailPageLink = React.memo((props) => {
 const ProfileCardList = () => {
   const [rowData, setRowData] = useState([]);
   const [columnDefs, setColumnDefs] = useState([
-    { headerName: '이름', field: 'name', cellClass: 'default-cell', cellRenderer: DetailPageLink },
+    
   ]);
   const [paginationInfo, setPaginationInfo] = useState({
     current: 1,
@@ -66,15 +66,19 @@ const ProfileCardList = () => {
       },
     });
 
-    if (!response || !response.list) return;
+
+    if (!response || !response.data) return;
     
 
-    setRowData(response.list);
+    setRowData(response.data.rows);
+    
     setPaginationInfo(prev => ({
       ...prev,
       current: targetPage || prev.current,
-      total: response.total,
+      total: response.data.count,
     }));
+
+
     setOrderInfo(sort);
   }, listFetchDependencies);
 
@@ -109,10 +113,6 @@ const ProfileCardList = () => {
     fetchProfileList();
     fetchAvailableColumns();
   }, []);
-  
-  useEffect(() => {
-    console.log(columnDefs);
-  }, [columnDefs]);
 
   const onCreateProfileCard = useCallback(async (createTargetName) => {
     // TODO: Change your api
@@ -135,8 +135,24 @@ const ProfileCardList = () => {
       return;
     }
     const { colId, sort } = sortedColumn;
+    console.log(paginationInfo.current)
+
+    setPaginationInfo(prevPaginationInfo => ({
+      ...prevPaginationInfo,
+      current: prevPaginationInfo.current,
+    }));
+
     fetchProfileList(undefined, [colId, sort]);
   }, []);
+
+  const handlePageChange = useCallback(
+    (page, pageSize) => {
+      
+      const sort = orderInfo;
+      fetchProfileList(page, sort);
+    },
+    [fetchProfileList, orderInfo]
+  );
 
   return (
     <div className="profile-card-list">
@@ -166,7 +182,7 @@ const ProfileCardList = () => {
       <Pagination
         className="pagination"
         {...paginationInfo}
-        onChange={fetchProfileList}
+        onChange={handlePageChange}
       />
 
       <CreateProfileCardModal

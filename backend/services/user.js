@@ -22,7 +22,7 @@ const findUserByNickName = async (nickname) => {
 const userColumnList = async (res) => {
     try {
         const tableInfo = await UserModel.describe();
-        const excludedColumns = ['idx', 'created_at', 'deleted_at', 'updated_at'];
+        const excludedColumns = ['idx', 'name', 'created_at', 'deleted_at', 'updated_at'];
 
       
         let valueStructures = []
@@ -49,12 +49,23 @@ const userColumnList = async (res) => {
     }
 };
 
-const userList = async (res) => {
-    try {
-        const list = await UserModel.findAll();
+const userList = async (data) => {
 
-        res.json({ list, total:list.length });
-    } catch (error) {
+    console.log(data.current)
+    const offset = (data.current - 1) * data.pageSize;
+    
+    try {
+        const users = await UserModel.findAndCountAll({
+            limit: offset + Number(data.pageSize),
+            offset: offset,
+            order: [data.sort]
+        });
+
+        const totalPages = Math.ceil(users.count / data.pageSize);
+        users.totalPages = totalPages
+        
+        return users;
+  } catch (error) {
         console.error('Error :', error);
     }
 }

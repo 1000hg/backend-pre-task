@@ -16,8 +16,10 @@ async function userColumnList(req, res, next) {
 
 
 async function userList(req, res, next) {
+    const data = req.query;
+
     try {
-        const user_list = await UserService.userList(res)
+        const user_list = await UserService.userList(data)
 
         user_list ? Status.sendSuccessResponse(res, "리스트를 호출하였습니다.", user_list)
                 : Status.sendNotFoundResponse(res, "리스트 호출에 실패하였습니다.");
