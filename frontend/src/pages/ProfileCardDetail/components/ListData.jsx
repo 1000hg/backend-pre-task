@@ -14,7 +14,9 @@ const ListData = (props) => {
   } = props;
 
   return structures.map(({ label, dataKey, childrenStructures }) => {
-    const childrenValues = value[dataKey];
+
+    let childrenValues = value[dataKey];
+    
     return (
       <div
         key={dataKey}
@@ -24,18 +26,24 @@ const ListData = (props) => {
           <h3>{label}</h3>
         </div>
         <div className="list-items">
-          {childrenValues.map(childrenValue => (
-            <SingleData
-              key={JSON.stringify(childrenValue)}
+        {childrenValues ? (
+            childrenValues.map(childrenValue => (
+                <SingleData
+                  key={JSON.stringify(childrenValue)}
+                  isListItem
+                  value={childrenValue}
+                  structures={childrenStructures}
+                />
+            ))
+        ) : <SingleData
               isListItem
-              value={childrenValue}
               structures={childrenStructures}
             />
-          ))}
+          }
           <Button
             className="add-new-list-item"
             block
-            onClick={() => onSaveValue({}, dataKey, childrenValues.length)}
+            onClick={() => onSaveValue({}, dataKey, childrenValues ? childrenValues.length : 0)}
           >
             새로운 항목 추가하기
           </Button>
@@ -52,7 +60,7 @@ ListData.propTypes = {
   structures: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string,
     dataKey: PropTypes.string,
-    type: PropTypes.oneOf(['text', 'phone', 'email', 'date', 'list']),
+    type: PropTypes.string,
   })),
   onSaveValue:PropTypes.func,
 };

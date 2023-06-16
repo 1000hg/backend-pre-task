@@ -37,7 +37,7 @@ async function userInfo(req, res, next) {
 
         const data = {
             userStructures: user_info,
-            allDataStructures: user_data_list
+            cardDataStructures: user_data_list
         }
 
         user_info ? Status.sendSuccessResponse(res, "유저 정보를 호출하였습니다.", data)

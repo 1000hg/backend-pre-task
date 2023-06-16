@@ -101,7 +101,7 @@ const SingleData = (props) => {
       >
 
         {structures.map(({ label, dataKey, type }) => {
-          if (dataKey === 'idx') {
+          if (dataKey === 'idx' || dataKey === 'user_idx') {
             return null;
           }
 

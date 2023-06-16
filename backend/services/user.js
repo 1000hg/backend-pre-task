@@ -51,7 +51,6 @@ const userColumnList = async (res) => {
 
 const userList = async (data) => {
 
-    console.log(data.current)
     const offset = (data.current - 1) * data.pageSize;
     
     try {

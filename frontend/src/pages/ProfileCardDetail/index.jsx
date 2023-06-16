@@ -61,23 +61,25 @@ const ProfileCardDetail = (props) => {
     };
   }, [profileDetail]);
 
-  // const listDataProps = useMemo(() => {
-  //   if (!profileDetail || !profileDetail.data.listStructures) return {};
+  const listDataProps = useMemo(() => {
 
-  //   const { value, listStructures: allDataStructures } = profileDetail;
-  //   const listStructures = allDataStructures.filter(({ type }) => type === 'list');
-  //   const listWithChildrenStructures = listStructures.map((listStructure) => {
-  //     const { dataKey: targetDataKey } = listStructure;
-  //     return {
-  //       ...listStructure,
-  //       childrenStructures: allDataStructures.filter(({ parentDataKey }) => parentDataKey === targetDataKey),
-  //     };
-  //   });
-  //   return {
-  //     value,
-  //     structures: listWithChildrenStructures,
-  //   };
-  // }, [profileDetail]);
+    console.log(profileDetail)
+    if (!profileDetail || !profileDetail.cardDataStructures) return {};
+
+     const { valueList: value, valueStructures: structures } = profileDetail.cardDataStructures;
+    // const childrenStructures = valueStructures.filter(({ type }) => type === 'list');
+    // const listWithChildrenStructures = childrenStructures.map((listStructure) => {
+    //   const { dataKey: targetDataKey } = listStructure;
+    //   return {
+    //     ...listStructure,
+    //     childrenStructures: valueStructures.filter(({ parentDataKey }) => parentDataKey === targetDataKey),
+    //   };
+    // });
+    return {
+      value,
+      structures,
+    };
+  }, [profileDetail]);
 
   const onSaveValue = useCallback(async (newValue, parentDataKey, itemIndex) => {
     const response = await request({
@@ -113,10 +115,10 @@ const ProfileCardDetail = (props) => {
           {...singleDataProps}
           onSaveValue={onSaveValue}
         />
-        {/* { <ListData
+        { <ListData
           {...listDataProps}
           onSaveValue={onSaveValue}
-        /> } */}
+        /> }
       </div>
     </div>
   );
