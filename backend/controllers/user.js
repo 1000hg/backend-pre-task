@@ -1,5 +1,5 @@
 const UserService = require('../services/user');
-const ProfileService = require('../services/profile_card');
+const ProfileService = require('../services/profile');
 const Status = require('../common/status')
 
 async function userColumnList(req, res, next) {
@@ -72,16 +72,26 @@ async function updateUser(req, res, next) {
     const { newValue, parentDataKey, itemIndex } = req.body;
 
     if (newValue) {
-        try {
+        if (newValue.company_name) {
+            try {
+                const update_profile = await ProfileService.updateProfile(newValue)
+                update_profile ? Status.sendSuccessResponse(res, "성공적으로 수정되었습니다.", update_profile)
+                            : Status.sendErrorResponse(res, "수정에 실패하였습니다.")
+            } catch (error) {
+                console.error('Error:', error);
+                Status.sendErrorResponse(res, "서버 호출에 실패하였습니다.");
+            }
+        } else {
+            try {
+                newValue.birdh = new Date(newValue.birdh);
 
-            newValue.birdh = new Date(newValue.birdh);
-
-            const update_user = await UserService.updateUser(newValue)
-            update_user ? Status.sendSuccessResponse(res, "성공적으로 수정되었습니다.", update_user)
-                        : Status.sendErrorResponse(res, "수정에 실패하였습니다.")
-        } catch (error) {
-            console.error('Error:', error);
-            Status.sendErrorResponse(res, "서버 호출에 실패하였습니다.");
+                const update_user = await UserService.updateUser(newValue)
+                update_user ? Status.sendSuccessResponse(res, "성공적으로 수정되었습니다.", update_user)
+                            : Status.sendErrorResponse(res, "수정에 실패하였습니다.")
+            } catch (error) {
+                console.error('Error:', error);
+                Status.sendErrorResponse(res, "서버 호출에 실패하였습니다.");
+            }
         }
     } else {
         Status.sendNotFoundResponse(res, "이름을 입력해주세요.")
@@ -93,17 +103,14 @@ async function deleteUser(req, res, next) {
 
     if (profileCardId) {
         try {
-            //const profileDelete = await ProfileService.deleteProfile(profileCardId)
+            const profileDelete = await ProfileService.deleteProfile(profileCardId)
             const userDelete = await UserService.deleteUser(profileCardId)
 
-            console.log("000000000000000")
-            console.log(userDelete)
-
-            /*if (userDelete && profileDelete) {
+            if (userDelete || profileDelete) {
                 Status.sendSuccessResponse(res, "성공적으로 삭제되었습니다.")
             } else {
                 Status.sendErrorResponse(res, "삽입에 실패하였습니다.")
-            }*/
+            }
 
         } catch (error) {
             console.error('Error:', error);

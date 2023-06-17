@@ -32,20 +32,18 @@ const profileInfo = async (user_idx) => {
         const valueList = [];
         const valueStructures = [];
 
-        if (value.length === 0) {
-            valueStructures.push({
-                label: '경력사항',
-                dataKey: 'data0',
-                childrenStructures: listStructure
-            })
-        }
+        valueStructures.push({
+            label: '경력사항',
+            dataKey: 'data0',
+            childrenStructures: listStructure
+        })
 
         value.forEach((item, index) => {
-            valueList.push({ [`data${index}`]: [item] })
+            valueList.push({ [`data${index+1}`]: [item] })
             
             valueStructures.push({
                 label: '경력사항',
-                dataKey: "data" + index,
+                dataKey: "data" + (Number(index) + 1),
                 childrenStructures: listStructure
             })
         })
@@ -71,7 +69,39 @@ const deleteProfile = async (idx) => {
     }
 };
 
+const addProfile = async (data) => {
+    try {
+        const newProfile = await ProfileModel.create(data);
+
+        return newProfile;
+    } catch (error) {
+        console.error('Error :', error);
+    }
+};
+
+const updateProfile = async (data) => {
+    try {
+
+        console.log(data)
+      const result = await ProfileModel.update(data, {
+          where: { idx: data.idx },
+      });
+
+      console.log(result)
+    
+      if (result[0] === 1) {
+        return 1;
+      } else {
+          return 0;
+      }
+    } catch (error) {
+      console.error('사용자 업데이트 오류:', error);
+    }
+  };
+
 module.exports = {
     profileInfo,
-    deleteProfile
+    deleteProfile,
+    addProfile,
+    updateProfile
 }

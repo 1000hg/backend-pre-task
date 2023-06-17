@@ -68,14 +68,7 @@ const ProfileCardDetail = (props) => {
     if (!profileDetail || !profileDetail.cardDataStructures) return {};
 
     const { valueList, valueStructures: structures } = profileDetail.cardDataStructures;
-    // const childrenStructures = valueStructures.filter(({ type }) => type === 'list');
-    // const listWithChildrenStructures = childrenStructures.map((listStructure) => {
-    //   const { dataKey: targetDataKey } = listStructure;
-    //   return {
-    //     ...listStructure,
-    //     childrenStructures: valueStructures.filter(({ parentDataKey }) => parentDataKey === targetDataKey),
-    //   };
-    // });
+
     return {
       valueList,
       structures,
@@ -98,19 +91,18 @@ const ProfileCardDetail = (props) => {
     fetchProfileCardDetail(profileCardId);
   }, [profileCardId]);
 
-  const onSaveListValue = useCallback(async (newValue, parentDataKey, itemIndex) => {
+  const onSaveListValue = useCallback(async (newValue) => {
     const response = await request({
       method: 'POST',
-      url: 'http://127.0.0.1:4000/user/listUpdate',
+      url: 'http://127.0.0.1:4000/profile/addProfile',
       data: {
         newValue,
-        parentDataKey,
-        itemIndex,
+        profileCardId
       },
     });
 
     if (!response) return;
-
+    window.location.reload();
   }, []);
 
   if (!profileDetail) return null;
@@ -133,7 +125,8 @@ const ProfileCardDetail = (props) => {
         />
         { <ListData
           {...listDataProps}
-          onSaveValue={onSaveListValue}
+          onSaveValue={onSaveValue}
+          onSaveListValue={onSaveListValue}
         /> }
       </div>
     </div>

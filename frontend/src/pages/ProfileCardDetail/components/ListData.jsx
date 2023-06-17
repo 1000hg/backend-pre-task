@@ -1,6 +1,7 @@
-import React from 'react';
+import {React, useState} from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'antd';
+
 
 import SingleData from './SingleData';
 
@@ -11,47 +12,63 @@ const ListData = (props) => {
     valueList,
     structures,
     onSaveValue,
+    onSaveListValue
   } = props;
 
-  return (
-    <div className="list-data">
-      {structures.map(({ label, dataKey, childrenStructures }, index) => {
-        const matchingValue = valueList.find(item => dataKey in item);
-        const childrenValues = matchingValue ? Object.values(matchingValue)[0] : null;
-        console.log(childrenValues);
-  
-        return (
-          <div key={`${dataKey}-${index}`} className="list-data">
-            <div className="list-data-header">
-              <h3>{label}</h3>
-            </div>
-            <div className="list-items">
-              {childrenValues ? (
-                childrenValues.map(childrenValue => (
-                  <SingleData
-                    key={JSON.stringify(childrenValue)}
-                    isListItem
-                    value={childrenValue}
-                    structures={childrenStructures}
-                  />
-                ))
-              ) : (
-                <SingleData isListItem structures={childrenStructures} />
-              )}
-            </div>
-          </div>
-        );
-      })}
-  
-      <Button
-        className="add-new-list-item"
-        block
-        // onClick={() => onSaveValue({}, dataKey, childrenValues ? childrenValues.length : 0)}
+  const [formData, setFormData] = useState(null);
+
+  const handleSaveValue = (values) => {
+    setFormData(values);
+  };
+
+
+  return structures.map(({ label, dataKey, childrenStructures }, index) => {
+
+    const matchingValue = valueList.find(item => dataKey in item);
+    const childrenValues = matchingValue ? Object.values(matchingValue)[0] : null;
+
+    return (
+      <div
+        key={dataKey}
+        className="list-data"
       >
-        새로운 항목 추가하기
-      </Button>
-    </div>
-  );
+        <div className="list-data-header">
+          <h3>{label}</h3>
+        </div>
+        <div className="list-items">
+        {childrenValues ? (
+            childrenValues.map(childrenValue => (
+                <SingleData
+                  key={JSON.stringify(childrenValue)}
+                  isListItem
+                  value={childrenValue}
+                  structures={childrenStructures}
+                  onSaveValue={onSaveValue}
+                />
+            ))
+        ) : <SingleData
+              isListItem
+              structures={childrenStructures}
+              dataKey = "data0"
+              handleSaveValue = {handleSaveValue}
+            />
+          }
+
+          {dataKey == "data0" ? <Button
+            className="add-new-list-item"
+            block
+            onClick={() => onSaveListValue(formData)}
+          >
+            새로운 항목 추가하기
+          </Button> : ""
+
+          }
+          
+        </div>
+      </div>
+    );
+  });
+
 };
 
 ListData.propTypes = {
@@ -64,6 +81,7 @@ ListData.propTypes = {
     type: PropTypes.string,
   })),
   onSaveValue:PropTypes.func,
+  onSaveListValue:PropTypes.func,
 };
 
 export default ListData;

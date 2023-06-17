@@ -105,7 +105,7 @@ const userInfo = async (user_idx) => {
 }
 
 
-const addUser = async (res, data) => {
+const addUser = async (data) => {
     try {
         const newUser = await UserModel.create(data);
 

@@ -64,6 +64,8 @@ const SingleData = (props) => {
     value,
     structures,
     onSaveValue,
+    dataKey,
+    handleSaveValue
   } = props;
 
   const [mode, setMode] = useState(MODE.VIEW);
@@ -83,21 +85,32 @@ const SingleData = (props) => {
 
   const parsedValue = useMemo(() => getParsedValue(value, structures), [value, structures]);
 
+  const onFinish = (values) => {
+    handleSaveValue(values);
+  };
+
   return (
     <div className={`single-data ${isListItem ? 'as-list-item' : ''}`}>
-      <HeaderButtons
-        mode={mode}
-        handeMode={handleMode}
-        onSave={() => {
-          const newValues = form.getFieldsValue();
-          newValues.idx = parsedValue.idx
-          onSaveValue(newValues);
-        }}
-        onReset={() => form.resetFields()}
-      />
+      {dataKey !== "data0" && (
+        <HeaderButtons
+          mode={mode}
+          handeMode={handleMode}
+          onSave={() => {
+            const newValues = form.getFieldsValue();
+            newValues.idx = parsedValue.idx
+            onSaveValue(newValues);
+          }}
+          onReset={() => form.resetFields()}
+        />
+      )}
       <Form
         form={form}
         initialValues={parsedValue}
+        onValuesChange={(changedValues, allValues) => {
+          if (dataKey === 'data0') {
+            onFinish(allValues);
+          }
+        }}
       >
 
         {structures.map(({ label, dataKey, type }) => {
@@ -112,6 +125,7 @@ const SingleData = (props) => {
           );
         })}
       </Form>
+      
     </div>
   );
 };
