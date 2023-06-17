@@ -8,15 +8,17 @@ import './ListData.scss';
 
 const ListData = (props) => {
   const {
-    value,
+    valueList,
     structures,
     onSaveValue,
   } = props;
 
-  return structures.map(({ label, dataKey, childrenStructures }) => {
+  return structures.map(({ label, dataKey, childrenStructures }, index) => {
 
-    let childrenValues = value[dataKey];
-    
+    const matchingValue = valueList.find(item => dataKey in item);
+    const childrenValues = matchingValue ? Object.values(matchingValue)[0] : null;
+    console.log(childrenValues)
+
     return (
       <div
         key={dataKey}
@@ -54,7 +56,7 @@ const ListData = (props) => {
 };
 
 ListData.propTypes = {
-  value: PropTypes.shape({
+  valueList: PropTypes.shape({
     [PropTypes.string]: PropTypes.string,
   }),
   structures: PropTypes.arrayOf(PropTypes.shape({

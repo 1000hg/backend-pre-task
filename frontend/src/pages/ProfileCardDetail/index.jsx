@@ -63,10 +63,10 @@ const ProfileCardDetail = (props) => {
 
   const listDataProps = useMemo(() => {
 
-    console.log(profileDetail)
+    
     if (!profileDetail || !profileDetail.cardDataStructures) return {};
 
-     const { valueList: value, valueStructures: structures } = profileDetail.cardDataStructures;
+    const { valueList, valueStructures: structures } = profileDetail.cardDataStructures;
     // const childrenStructures = valueStructures.filter(({ type }) => type === 'list');
     // const listWithChildrenStructures = childrenStructures.map((listStructure) => {
     //   const { dataKey: targetDataKey } = listStructure;
@@ -76,7 +76,7 @@ const ProfileCardDetail = (props) => {
     //   };
     // });
     return {
-      value,
+      valueList,
       structures,
     };
   }, [profileDetail]);
@@ -96,6 +96,21 @@ const ProfileCardDetail = (props) => {
 
     fetchProfileCardDetail(profileCardId);
   }, [profileCardId]);
+
+  const onSaveListValue = useCallback(async (newValue, parentDataKey, itemIndex) => {
+    const response = await request({
+      method: 'POST',
+      url: 'http://127.0.0.1:4000/user/listUpdate',
+      data: {
+        newValue,
+        parentDataKey,
+        itemIndex,
+      },
+    });
+
+    if (!response) return;
+
+  }, []);
 
   if (!profileDetail) return null;
 
@@ -117,7 +132,7 @@ const ProfileCardDetail = (props) => {
         />
         { <ListData
           {...listDataProps}
-          onSaveValue={onSaveValue}
+          onSaveValue={onSaveListValue}
         /> }
       </div>
     </div>

@@ -5,11 +5,11 @@ const profileInfo = async (user_idx) => {
         const value = await ProfileModel.findAll({
             where: {
                 user_idx: user_idx,
-            },
+            }, raw:true
         });
 
         const tableInfo = await ProfileModel.describe();
-        const includedColumns = ['user_idx', 'company_name', 'job_title', 'hire_date', 'quit_date'];
+        const includedColumns = ['idx', 'user_idx', 'company_name', 'job_title', 'hire_date', 'quit_date'];
 
         const listStructure =  []
 
@@ -41,15 +41,16 @@ const profileInfo = async (user_idx) => {
         }
 
         value.forEach((item, index) => {
-            valueList["data" + index] = item
-
+            valueList.push({ [`data${index}`]: [item] })
+            
             valueStructures.push({
                 label: '경력사항',
                 dataKey: "data" + index,
                 childrenStructures: listStructure
             })
         })
-        
+
+
         return {valueList, valueStructures};
     } catch (error) {
         console.error('Error :', error);
