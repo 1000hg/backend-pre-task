@@ -117,8 +117,8 @@ const addUser = async (res, data) => {
 
 const updateUser = async (data) => {
   try {
-    const result = await UserModel.update(updatedUserInfo, {
-        where: { idx: updatedUserInfo.idx },
+    const result = await UserModel.update(data, {
+        where: { idx: data.idx },
     });
   
     if (result[0] === 1) {
@@ -131,11 +131,26 @@ const updateUser = async (data) => {
   }
 };
 
+const deleteUser = async (idx) => {
+    try {
+        const result = await UserModel.destroy({ where: { idx } });
+    
+        if (result >= 0) {
+            return 1
+        } else {
+            return 0;
+        }
+    } catch (error) {
+      console.error('사용자 업데이트 오류:', error);
+    }
+};
+
 module.exports = {
     findUserByNickName,
     userColumnList,
     userList,
     userInfo,
     addUser,
-    updateUser
+    updateUser,
+    deleteUser
 }

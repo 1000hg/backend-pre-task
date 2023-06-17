@@ -57,6 +57,21 @@ const profileInfo = async (user_idx) => {
     }
 }
 
+const deleteProfile = async (idx) => {
+    try {
+        const result = await ProfileModel.destroy({ where: { user_idx: idx } });
+    
+        if (result >= 0) {
+            return 1
+        } else {
+            return 0;
+        }
+    } catch (error) {
+      console.error('사용자 업데이트 오류:', error);
+    }
+};
+
 module.exports = {
-    profileInfo
+    profileInfo,
+    deleteProfile
 }

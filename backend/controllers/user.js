@@ -40,7 +40,7 @@ async function userInfo(req, res, next) {
             cardDataStructures: user_data_list
         }
 
-        user_info ? Status.sendSuccessResponse(res, "유저 정보를 호출하였습니다.", data)
+        data ? Status.sendSuccessResponse(res, "유저 정보를 호출하였습니다.", data)
                 : Status.sendNotFoundResponse(res, "유저 정보 호출에 실패하였습니다.");
     } catch (error) {
         console.error('Error:', error);
@@ -77,8 +77,8 @@ async function updateUser(req, res, next) {
             newValue.birdh = new Date(newValue.birdh);
 
             const update_user = await UserService.updateUser(newValue)
-            update_user ? Status.sendSuccessResponse(res, "성공적으로 삽입되었습니다.", update_user)
-                        : Status.sendErrorResponse(res, "삽입에 실패하였습니다.")
+            update_user ? Status.sendSuccessResponse(res, "성공적으로 수정되었습니다.", update_user)
+                        : Status.sendErrorResponse(res, "수정에 실패하였습니다.")
         } catch (error) {
             console.error('Error:', error);
             Status.sendErrorResponse(res, "서버 호출에 실패하였습니다.");
@@ -88,10 +88,37 @@ async function updateUser(req, res, next) {
     }
 }
 
+async function deleteUser(req, res, next) {
+    const { profileCardId } = req.body;
+
+    if (profileCardId) {
+        try {
+            //const profileDelete = await ProfileService.deleteProfile(profileCardId)
+            const userDelete = await UserService.deleteUser(profileCardId)
+
+            console.log("000000000000000")
+            console.log(userDelete)
+
+            /*if (userDelete && profileDelete) {
+                Status.sendSuccessResponse(res, "성공적으로 삭제되었습니다.")
+            } else {
+                Status.sendErrorResponse(res, "삽입에 실패하였습니다.")
+            }*/
+
+        } catch (error) {
+            console.error('Error:', error);
+            Status.sendErrorResponse(res, "서버 호출에 실패하였습니다.");
+        }
+    } else {
+        Status.sendNotFoundResponse(res, "유저를 선택해주세요.")
+    }
+}
+
 module.exports = {
     userColumnList,
     userList,
     userInfo,
     addUser,
-    updateUser
+    updateUser,
+    deleteUser
 };

@@ -40,7 +40,8 @@ const ProfileCardDetail = (props) => {
     // TODO: Change your api
     const response = await request({
       method: 'POST',
-      url: '/api/??',
+      url: 'http://127.0.0.1:4000/user/deleteUser',
+      data: { profileCardId }
     });
     if (!response) return;
 
