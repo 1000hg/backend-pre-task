@@ -21,8 +21,6 @@ services:
       - db
     networks:
       - internal
-    ports:
-      - 4000:4000
 
   db:
     image: mysql

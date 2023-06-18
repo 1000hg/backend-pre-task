@@ -56,7 +56,7 @@ async function addUser(req, res, next) {
 
     if (data) {
         try {
-            const insert_user = await UserService.addUser(res, data)
+            const insert_user = await UserService.addUser(data)
             insert_user ? Status.sendSuccessResponse(res, "성공적으로 삽입되었습니다.", insert_user)
                         : Status.sendErrorResponse(res, "삽입에 실패하였습니다.")
         } catch (error) {

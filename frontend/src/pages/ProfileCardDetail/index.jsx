@@ -24,7 +24,7 @@ const ProfileCardDetail = (props) => {
     // TODO: Change your api
     const response = await request({
       method: 'GET',
-      url: `http://127.0.0.1:4000/user/userInfo/${fetchTargetId}`,
+      url: `/api/user/userInfo/${fetchTargetId}`,
     });
     
     if (!response || !response.data) return;
@@ -40,7 +40,7 @@ const ProfileCardDetail = (props) => {
     // TODO: Change your api
     const response = await request({
       method: 'POST',
-      url: 'http://127.0.0.1:4000/user/deleteUser',
+      url: '/api/user/deleteUser',
       data: { profileCardId }
     });
     if (!response) return;
@@ -78,7 +78,7 @@ const ProfileCardDetail = (props) => {
   const onSaveValue = useCallback(async (newValue, parentDataKey, itemIndex) => {
     const response = await request({
       method: 'POST',
-      url: 'http://127.0.0.1:4000/user/updateUser',
+      url: '/api/user/updateUser',
       data: {
         newValue,
         parentDataKey,
@@ -94,7 +94,7 @@ const ProfileCardDetail = (props) => {
   const onSaveListValue = useCallback(async (newValue) => {
     const response = await request({
       method: 'POST',
-      url: 'http://127.0.0.1:4000/profile/addProfile',
+      url: '/api/profile/addProfile',
       data: {
         newValue,
         profileCardId

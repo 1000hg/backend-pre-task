@@ -64,7 +64,7 @@ const SingleData = (props) => {
     value,
     structures,
     onSaveValue,
-    dataKey,
+    getDataKey,
     handleSaveValue
   } = props;
 
@@ -91,7 +91,7 @@ const SingleData = (props) => {
 
   return (
     <div className={`single-data ${isListItem ? 'as-list-item' : ''}`}>
-      {dataKey !== "data0" && (
+      {getDataKey !== "data0" && (
         <HeaderButtons
           mode={mode}
           handeMode={handleMode}
@@ -107,7 +107,7 @@ const SingleData = (props) => {
         form={form}
         initialValues={parsedValue}
         onValuesChange={(changedValues, allValues) => {
-          if (dataKey === 'data0') {
+          if (getDataKey === 'data0') {
             onFinish(allValues);
           }
         }}
@@ -120,7 +120,7 @@ const SingleData = (props) => {
 
           return (
             <Form.Item key={dataKey} name={dataKey} label={label}>
-              <DataBinder type={type} disabled={mode === MODE.VIEW} />
+              <DataBinder type={type} disabled={mode === (getDataKey === "data0" ? MODE.EDIT : MODE.VIEW)} />
             </Form.Item>
           );
         })}

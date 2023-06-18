@@ -49,7 +49,7 @@ const ListData = (props) => {
         ) : <SingleData
               isListItem
               structures={childrenStructures}
-              dataKey = "data0"
+              getDataKey = "data0"
               handleSaveValue = {handleSaveValue}
             />
           }

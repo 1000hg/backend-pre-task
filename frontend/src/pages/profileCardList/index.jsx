@@ -57,7 +57,7 @@ const ProfileCardList = () => {
     // TODO: Change your api
     const response = await request({
       method: 'GET',
-      url: 'http://127.0.0.1:4000/user/userList',
+      url: '/api/user/userList',
       params: {
         current: targetPage || paginationInfo.current,
         columns: columnDefs.map(({ field }) => field),
@@ -86,7 +86,7 @@ const ProfileCardList = () => {
     // TODO: Change your api
     const response = await request({
       method: 'GET',
-      url: 'http://127.0.0.1:4000/user/userColumnList',
+      url: '/api/user/userColumnList',
     });
     
     if (!response || !response.data) return;
@@ -118,7 +118,7 @@ const ProfileCardList = () => {
     // TODO: Change your api
     const response = await request({
       method: 'POST',
-      url: 'http://127.0.0.1:4000/user/addUser',
+      url: '/api/user/addUser',
       data: { createTargetName }
     });
     if (!response || !response.success) return;
